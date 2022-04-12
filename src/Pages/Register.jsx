@@ -19,6 +19,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
+import { NavLink, useNavigate } from "react-router-dom";
+
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../store/auth";
+
 function Copyright(props) {
   return (
     <Typography
@@ -40,13 +45,16 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
+  const navigate = useNavigate();
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
   // yup validations
   const formSchema = Yup.object().shape({
     first_name: Yup.string()
       .required("First Name is required")
       .min(4, "First Name should contain at least 4 letters."),
     last_name: Yup.string().required("Last Name is required"),
-    username: Yup.string().required("Unique username is required"),
+    // username: Yup.string().required("Unique username is required"), removed and added email as the login parameter
 
     email: Yup.string()
       .required("Email is required")
@@ -59,9 +67,7 @@ export default function Register() {
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         " Password requires Minimum eight characters, at least one letter, one number and one special character:"
-      )
-      ,
-
+      ),
     password2: Yup.string()
       .required("Confirm Password is required")
       .oneOf([Yup.ref("password1")], "Passwords must and should match"),
@@ -82,7 +88,11 @@ export default function Register() {
       .post(`${default_url}/api/user_registration/`, data)
       .then(
         (res) => (
-          console.log(res.data), console.log(res.data.user), console.log(res)
+          console.log(res.data),
+          console.log(res.data.user),
+          console.log(res),
+          dispatch(authActions.login(res.data)),
+          navigate("/")
         )
       )
       .catch((error) => console.log(error));
@@ -95,7 +105,7 @@ export default function Register() {
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 5,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -155,7 +165,8 @@ export default function Register() {
                     helperText={errors?.email ? errors.email.message : null}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* ---> removed this and added email as login parameter..
+                 <Grid item xs={12}>
                   <TextField
                     fullWidth
                     id="username"
@@ -167,7 +178,7 @@ export default function Register() {
                       errors?.username ? errors.username.message : null
                     }
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
                     // required
@@ -209,9 +220,9 @@ export default function Register() {
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <NavLink to="/signin" variant="body2">
                     Already have an account? Sign in
-                  </Link>
+                  </NavLink>
                 </Grid>
               </Grid>
             </Box>
