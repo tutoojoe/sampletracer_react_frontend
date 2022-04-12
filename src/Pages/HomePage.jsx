@@ -19,7 +19,6 @@ const HomePage = () => {
         <Container>
           <Typography variant="h3" marginTop={3}>
             Welcome to Sample Tracer
-            <StyleListTable />
             <Typography>Please Sign In to continue</Typography>
           </Typography>
 
@@ -38,6 +37,9 @@ const HomePage = () => {
           </Typography>
 
           <Grid container spacing={2}>
+            <Grid item xs={12} md={12} xl={12}>
+              <StyleListTable />
+            </Grid>
             <Grid item xs={12} md={6} xl={4}>
               <BasicCard></BasicCard>
             </Grid>
