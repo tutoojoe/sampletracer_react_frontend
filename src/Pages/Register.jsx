@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,6 +24,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
   return (
@@ -45,6 +47,9 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
+  const [alert, setAlert] = useState(false);
+  const [regStatus, setRegStatus] = useState("");
+  const [alertContent, setAlertContent] = useState("");
   const navigate = useNavigate();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
@@ -92,10 +97,20 @@ export default function Register() {
           console.log(res.data.user),
           console.log(res),
           dispatch(authActions.login(res.data)),
-          navigate("/")
+          setRegStatus("success"),
+          setAlertContent("Registration Successful"),
+          setAlert(true),
+          setTimeout(() => {
+            navigate("/");
+          }, 1500)
         )
       )
-      .catch((error) => console.log(error));
+      .catch(
+        (error) => console.log(error),
+        setRegStatus("error"),
+        setAlertContent("Some error..!!"),
+        setAlert(true)
+      );
   };
 
   return (
@@ -218,6 +233,12 @@ export default function Register() {
               >
                 Register
               </Button>
+
+              {alert ? (
+                <Alert severity={regStatus}>{alertContent}</Alert>
+              ) : (
+                <></>
+              )}
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <NavLink to="/signin" variant="body2">

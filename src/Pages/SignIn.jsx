@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 
 import Avatar from "@mui/material/Avatar";
@@ -25,6 +25,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
 
+// import BasicAlerts from "../components/BasicAlerts";
+// import * as React from "react";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+
 const theme = createTheme();
 
 function Copyright(props) {
@@ -46,6 +51,9 @@ function Copyright(props) {
 }
 
 const SignIn = () => {
+  const [alert, setAlert] = useState(false);
+  const [loginStatus, setLoginStatus] = useState("");
+  const [alertContent, setAlertContent] = useState("");
   const navigate = useNavigate();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
@@ -73,10 +81,21 @@ const SignIn = () => {
           console.log(res.data),
           console.log(res.data.user, "this is the user details"),
           dispatch(authActions.login(res.data)),
-          navigate("/")
+          setLoginStatus("success"),
+          setAlertContent("Login Successful"),
+          setAlert(true),
+          console.log("login successful"),
+          setTimeout(() => {
+            navigate("/");
+          }, 1500)
         )
       )
-      .catch((error) => console.log(error.response.data));
+      .catch(
+        (error) => console.log(error.response.data),
+        setLoginStatus("error"),
+        setAlertContent("Something went wrong..!! Please try again."),
+        setAlert(true)
+      );
   };
 
   return (
@@ -141,6 +160,12 @@ const SignIn = () => {
               >
                 Sign In
               </Button>
+              {alert ? (
+                <Alert severity={loginStatus}>{alertContent}</Alert>
+              ) : (
+                <></>
+              )}
+
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <NavLink to="/register">

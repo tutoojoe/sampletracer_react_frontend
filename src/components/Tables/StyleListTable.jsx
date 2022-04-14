@@ -4,6 +4,8 @@ import axios from "axios";
 import { default_url } from "../constants";
 
 const StyleListTable = () => {
+  const [data, setData] = useState([]);
+
   useEffect(() => {
     axios.get(`${default_url}/api/products/`).then((res) => {
       console.log(res);
@@ -55,7 +57,6 @@ const StyleListTable = () => {
     },
   ];
 
-  const [data, setData] = useState([]);
   //   const data = [
   //     ["Joe James", "Test Corp", "Yonkers", "NY"],
   //     ["John Walsh", "Test Corp", "Hartford", "CT"],
