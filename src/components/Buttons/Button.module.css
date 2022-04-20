@@ -1,0 +1,18 @@
+button {
+    border: none;
+    color: #090909;
+    padding: 0.7em 1.7em;
+    font-size: 18px;
+    border-radius: 0.5em;
+    background: #e8e8e8;
+    border: 1px solid #e8e8e8;
+    transition: all .3s;
+    box-shadow: 2px 2px 1px #c5c5c5,
+        -2px -2px 5px #ffffff;
+}
+
+button:active {
+    color: #666;
+    box-shadow: inset 2px 2px 5px #c5c5c5,
+        inset -2px -2px 5px #ffffff;
+}

@@ -124,6 +124,9 @@ export default function Register() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              boxShadow: 3,
+              padding: 2,
+              // bgcolor: "antiquewhite",
             }}
           >
             <Typography component="h1" variant="h4">

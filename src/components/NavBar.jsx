@@ -12,19 +12,34 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../store/auth";
+// import { authActions } from "../store/auth";
+import { loginActions } from "../store/loginSlice";
+import { useNavigate } from "react-router-dom";
 
 const pages = [
-  "Live Status",
-  "Customers",
-  "Merchandisers",
-  "Suppliers",
-  "Store",
+  { menuId: 1, menuItem: "Live Status" },
+  { menuId: 2, menuItem: "Customers" },
+  { menuId: 3, menuItem: "Merchandisers" },
+  { menuId: 4, menuItem: "Suppliers" },
+  { menuId: 5, menuItem: "Store" },
+
+  // "Live Status",
+  // "Customers",
+  // "Merchandisers",
+  // "Suppliers",
+  // "Store",
 ];
-const settings = ["Profile","Account","Dashboard", "Logout"];
+// const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { id: 1, item: "Profile" },
+  { id: 2, item: "Account" },
+  { id: 3, item: "Dashboard" },
+  { id: 4, item: "Logout" },
+];
 
 const NavBar = () => {
-  const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
+  // const isAuth = useSelector((state) => state.login.isAuth);
 
   const dispatch = useDispatch();
 
@@ -41,25 +56,46 @@ const NavBar = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    console.log("inside closenavmenu");
+  const handleCloseNavMenu = (id) => {
+    console.log("inside closenavmenu", id);
+    if (id === 1) {
+      console.log("live status");
+      navigate("/");
+    } else if (id === 2) {
+      console.log("customers page");
+      navigate("customers/");
+    }
 
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (id) => {
     console.log("inside closeuserMenu");
+    console.log("selected item", id);
+    if (id === 1) {
+      console.log("profile selected");
+    } else if (id === 2) {
+      console.log("Account selected");
+    } else if (id === 3) {
+      console.log("Dashboard requested");
+    } else if (id === 4) {
+      console.log("logout requested");
 
+      dispatch(loginActions.logOutPending());
+
+      // dispatch(loginActions.logOut());
+    }
     setAnchorElUser(null);
   };
 
-  const handleSelectFn = (e) => {
-    const selectedAction = e.currentTarget.innerHTML;
-    if (selectedAction === "Logout") {
-      console.log("logout clicked");
-      dispatch(authActions.logout());
-    }
-  };
+  // const handleSelectFn = (e) => {
+  //   const selectedAction = e.currentTarget.innerHTML;
+  //   if (selectedAction === "Logout") {
+  //     console.log("logout clicked");
+  //     // dispatch(authActions.logout());
+  //     dispatch(loginActions.logOut());
+  //   }
+  // };
 
   return (
     <AppBar position="static">
@@ -104,8 +140,13 @@ const NavBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.menuId}
+                  onClick={() => {
+                    handleCloseNavMenu(page.menuId);
+                  }}
+                >
+                  <Typography textAlign="center">{page.menuItem}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -121,11 +162,13 @@ const NavBar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.menuId}
+                onClick={() => {
+                  handleCloseNavMenu(page.menuId);
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.menuItem}
               </Button>
             ))}
           </Box>
@@ -152,11 +195,20 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {/* {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center" onClick={handleSelectFn}>
-                    {setting}
-                  </Typography>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))} */}
+
+              {settings.map((setting) => (
+                <MenuItem
+                  key={setting.id}
+                  onClick={() => {
+                    handleCloseUserMenu(setting.id);
+                  }}
+                >
+                  <Typography textAlign="center">{setting.item}</Typography>
                 </MenuItem>
               ))}
             </Menu>

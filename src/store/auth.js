@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialAuthState = {
-
   isAuthenticated: false,
   loggedUser: {
     pk: null,
@@ -10,8 +9,8 @@ const initialAuthState = {
     first_name: "",
     last_name: "",
   },
-//   access_token: "",  
-//   refresh_token: "",
+  //   access_token: "",
+  //   refresh_token: "",
 };
 
 const authSlice = createSlice({
@@ -26,11 +25,11 @@ const authSlice = createSlice({
       state.loggedUser.email = action.payload.user.email;
       state.loggedUser.username = action.payload.user.username;
 
-      localStorage.setItem("access_token",action.payload.access_token)
-      localStorage.setItem("refresh_token",action.payload.refresh_token)
+      // localStorage.setItem("access_token",action.payload.access_token)
+      // localStorage.setItem("refresh_token",action.payload.refresh_token)
 
-    //   state.access_token = action.payload.access_token;
-    //   state.refresh_token = action.payload.refresh_token;
+      //   state.access_token = action.payload.access_token;
+      //   state.refresh_token = action.payload.refresh_token;
     },
     logout(state) {
       state.isAuthenticated = false;

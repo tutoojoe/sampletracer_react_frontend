@@ -24,12 +24,17 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
+import { loginActions } from "../store/loginSlice";
+import { userActions } from "../store/userSlice";
+
+import { getUserProfile } from "../store/userActions";
 
 // import BasicAlerts from "../components/BasicAlerts";
 // import * as React from "react";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import LinearProgress from "@mui/material/LinearProgress";
 const theme = createTheme();
 
 function Copyright(props) {
@@ -55,7 +60,8 @@ const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState("");
   const [alertContent, setAlertContent] = useState("");
   const navigate = useNavigate();
-  const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  // const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const { isLoading, isAuth, error } = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   const formSchema = Yup.object().shape({
@@ -69,32 +75,57 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm(validationOpt);
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(loginActions.loginPending());
     axios
       .post(`${default_url}/api/user/login/`, data)
       .then(
         (res) => (
           console.log(res.data),
           console.log(res.data.user, "this is the user details"),
-          dispatch(authActions.login(res.data)),
+          dispatch(loginActions.loginSuccess(res.data)),
+          dispatch(userActions.getUserSuccess(res.data)),
+          // dispatch(authActions.login(res.data)),
+          dispatch(getUserProfile()),
           setLoginStatus("success"),
           setAlertContent("Login Successful"),
           setAlert(true),
-          console.log("login successful"),
+          // console.log("login successful"),
+          // Access token and refresh token management.
+          sessionStorage.setItem("accessJWT", res.data.access_token),
+          localStorage.setItem(
+            "userRefresh",
+            JSON.stringify({ refreshJWT: res.data.refresh_token })
+          ),
           setTimeout(() => {
             navigate("/");
           }, 1500)
         )
       )
       .catch(
-        (error) => console.log(error.response.data),
-        setLoginStatus("error"),
-        setAlertContent("Something went wrong..!! Please try again."),
-        setAlert(true)
+        (err) => (
+          // console.log("error console"),
+          // console.log("error", err),
+          // console.log("response", err.response),
+          // console.log("-----"),
+          console.log("error message -->", err.message),
+          // console.log(" responsetext below-----"),
+          // console.log("error responsetxt -->", err.responseText[0]),
+          // console.log(" request.responsetext below-----"),
+          // console.log(
+          //   "error request.responsetxt -->",
+          //   err.request.responseText
+          // ),
+          // console.log(" response.data below-----"),
+          dispatch(loginActions.loginFail(err.message))
+          // setLoginStatus("error"),
+          // setAlertContent("Something went wrong..!! Please try again."),
+          // setAlert(true)
+        )
       );
   };
 
@@ -106,9 +137,11 @@ const SignIn = () => {
           <Box
             sx={{
               marginTop: 8,
+              padding: 2,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              boxShadow: 2,
             }}
           >
             <Typography component="h1" variant="h4">
@@ -160,7 +193,17 @@ const SignIn = () => {
               >
                 Sign In
               </Button>
-              {alert ? (
+              {isLoading && (
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgress />
+                </Box>
+                // <Box sx={{ display: "flex" }}>
+
+                //   <CircularProgress />
+                // </Box>
+              )}
+              {error && <Alert severity="warning">{error}</Alert>}
+              {!isLoading && alert ? (
                 <Alert severity={loginStatus}>{alertContent}</Alert>
               ) : (
                 <></>
