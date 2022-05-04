@@ -7,17 +7,21 @@ import Register from "./Pages/Register";
 import HomePage from "./Pages/HomePage";
 import SignIn from "./Pages/SignIn";
 import CustomersPage from "./Pages/CustomersPage";
+import MainNav from "./components/MainNav";
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="register/" element={<Register />} />
-        <Route path="signin/" element={<SignIn />} />
-        <Route path="customers/" element={<CustomersPage />} />
-      </Routes>
-    </div>
+    <MainNav>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="register/" element={<Register />} />
+          <Route path="signin/" element={<SignIn />} />
+          <Route path="customers/" element={<CustomersPage />} />
+          <Route path="google/" element={<GLogin />}></Route>
+        </Routes>
+      </div>
+    </MainNav>
   );
 }
 

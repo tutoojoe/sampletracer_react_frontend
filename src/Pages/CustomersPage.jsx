@@ -13,32 +13,44 @@ import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { loginActions } from "../store/loginSlice";
 import CustomerTable from "../components/CustomerTable";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CustomersPage = () => {
+  const navigate = useNavigate();
+  const isAuth = useSelector((state) => state.login.isAuth);
+
+  useEffect(() => {
+    if (!isAuth) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <>
-      <NavBar />
+      {/* {!isAuth && navigate("/")} */}
+      {isAuth && (
+        <Container style={{ paddingTop: 5 }}>
+          <Box
+            sx={{
+              alignContent: "center",
+              boxShadow: 2,
+              // marginTop: 3,
+              marginBlock: 3,
+              padding: 3,
+            }}
+          >
+            <Typography variant="h4">Customers</Typography>
+          </Box>
 
-      <Container style={{ paddingTop: 5 }}>
-        <Box
-          sx={{
-            alignContent: "center",
-            boxShadow: 2,
-            // marginTop: 3,
-            marginBlock: 3,
-            padding: 3,
-          }}
-        >
-          <Typography variant="h4">Customers</Typography>
-        </Box>
-
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12} xl={12}>
-            {/* <StyleListTable /> */}
-            <CustomerTable />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12} xl={12}>
+              {/* <StyleListTable /> */}
+              <CustomerTable />
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      )}
     </>
   );
 };

@@ -7,9 +7,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../store/loginSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LogoutConfirmAlert() {
   const logStatus = useSelector((state) => state.login.logoutStatus);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -28,6 +30,8 @@ export default function LogoutConfirmAlert() {
     localStorage.removeItem("userRefresh");
     sessionStorage.removeItem("accessJWT");
     setOpen(false);
+    console.log("logged out successfully, diverting to homepage");
+    navigate("/", { replace: true });
   };
 
   return (

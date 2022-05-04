@@ -15,7 +15,9 @@ import Typography from "@mui/material/Typography";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { default_url } from "../components/constants";
-import axios from "axios";
+// import axios from "axios";
+import axios from "../components/axios";
+import requestAPIs from "../components/requestAPIs";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -82,7 +84,8 @@ const SignIn = () => {
     console.log(data);
     dispatch(loginActions.loginPending());
     axios
-      .post(`${default_url}/api/user/login/`, data)
+      // .post(`${default_url}/api/user/login/`, data)
+      .post(requestAPIs.login, data)
       .then(
         (res) => (
           console.log(res.data),

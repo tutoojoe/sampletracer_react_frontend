@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import NavBar from "../components/NavBar";
+// import NavBar from "../components/NavBar";
 import { Grid } from "@mui/material";
 import BasicCard from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,62 +9,73 @@ import { NavLink } from "react-router-dom";
 import StyleListTable from "../components/Tables/StyleListTable";
 import Box from "@mui/material/Box";
 import PieChart from "../components/Charts/PieChart";
-import LogoutConfirmAlert from "../components/Alerts/LogoutConfirmAlert";
+// import LogoutConfirmAlert from "../components/Alerts/LogoutConfirmAlert";
 import BarChart from "../components/Charts/BarChart";
 import DoughnutChart from "../components/Charts/DoughnutChart";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
+// import axios from "axios";
+import axios from "../components/axios";
+import requestAPIs from "../components/requestAPIs";
 import { loginActions } from "../store/loginSlice";
 
-import { default_url } from "../components/constants";
+import GridItemCard from "../components/UI/GridItemCard";
+import GridContainer from "../components/UI/GridContainer";
+
+// import { default_url } from "../components/constants";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const [initialCheck, setInitialCheck] = useState(true);
   const isAuth = useSelector((state) => state.login.isAuth);
-  const logStatus = useSelector((state) => state.login.logoutStatus);
+  // const logStatus = useSelector((state) => state.login.logoutStatus);
   useEffect(() => {
     if (!isAuth) {
       console.log("not");
 
-      const accessToken = sessionStorage.getItem("accessJWT");
-      const refreshToken = JSON.parse(localStorage.getItem("userRefresh"));
+      const accessToken = sessionStorage?.getItem("accessJWT");
+      const refreshToken = JSON.parse(localStorage?.getItem("userRefresh"));
+      if (accessToken && refreshToken) {
+        console.log(accessToken);
+        console.log("refresh token", refreshToken);
+        console.log("refresh token", refreshToken["refreshJWT"]);
 
-      console.log(accessToken);
-      console.log("refresh token", refreshToken);
-      console.log("refresh token", refreshToken["refreshJWT"]);
-
-      axios
-        .post(`${default_url}/api/user/token/verify/`, {
-          token: `${accessToken}`,
-        })
-        .then(function (response) {
-          console.log("success response", response);
-          if (response.status === 200) {
-            console.log("valid key, authorizaition successful");
-            dispatch(loginActions.loginSuccess());
-          }
-        })
-        .catch(function (error) {
-          console.log("error =>", error);
-          axios
-            .post(`${default_url}/api/token/refresh/`, {
-              refresh: `${refreshToken.refreshJWT}`,
-            })
-            .then((response) => {
-              console.log(response);
-              sessionStorage.setItem("accessJWT", response.data.access_token);
+        axios
+          // .post(`${default_url}/api/user/token/verify/`, {
+          .post(requestAPIs.tokenverify, {
+            token: `${accessToken}`,
+          })
+          .then(function (response) {
+            console.log("success response", response);
+            if (response.status === 200) {
+              console.log("valid key, authorizaition successful");
               dispatch(loginActions.loginSuccess());
-            })
-            .catch((error) => {
-              console.log("refresh token also expired");
-              setInitialCheck(false);
-            });
-        });
+            }
+          })
+          .catch(function (error) {
+            console.log("error =>", error);
+            axios
+              // .post(`${default_url}/api/token/refresh/`, {
+              .post(requestAPIs.tokenrefresh, {
+                refresh: `${refreshToken.refreshJWT}`,
+              })
+              .then((response) => {
+                console.log(response);
+                sessionStorage.setItem("accessJWT", response.data.access_token);
+                dispatch(loginActions.loginSuccess());
+              })
+              .catch((error) => {
+                console.log("refresh token also expired");
+                setInitialCheck(false);
+              });
+          });
+      } else {
+        console.log("user logged out no tokens");
+        setInitialCheck(false);
+      }
     }
   }, [isAuth]);
-  const userdetails = useSelector((state) => state.auth.loggedUser);
+  // const userdetails = useSelector((state) => state.auth.loggedUser);
 
   return (
     <div>
@@ -79,7 +90,7 @@ const HomePage = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {isAuth && logStatus && <LogoutConfirmAlert />}
+      {/* {isAuth && logStatus && <LogoutConfirmAlert />} */}
 
       {!isAuth && (
         <Container>
@@ -106,7 +117,6 @@ const HomePage = () => {
           </Box>
         </Container>
       )}
-      {isAuth && <NavBar />}
 
       {isAuth && (
         <Container>
@@ -116,40 +126,20 @@ const HomePage = () => {
               <Typography>Samples are never late again</Typography>
             </Typography>
           </Box>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6} xl={4}>
+          <GridContainer>
+            <GridItemCard>
               <PieChart />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
+            </GridItemCard>
+            <GridItemCard>
               <BarChart />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
+            </GridItemCard>
+            <GridItemCard>
               <DoughnutChart />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={12}>
+            </GridItemCard>
+            <GridItemCard xs={12} md={12} xl={12}>
               <StyleListTable />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <BasicCard></BasicCard>
-            </Grid>
-            {/* <Grid item xs={12} md={6} xl={4}>
-              <BasicCard></BasicCard>
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <BasicCard></BasicCard>
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <BasicCard></BasicCard>
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <BasicCard></BasicCard>
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <BasicCard></BasicCard>
-            </Grid> */}
-          </Grid>
+            </GridItemCard>
+          </GridContainer>
         </Container>
       )}
     </div>

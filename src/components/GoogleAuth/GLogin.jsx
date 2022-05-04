@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 import { GoogleLogin } from "react-google-login";
 
@@ -6,15 +6,14 @@ const clientId =
   "936524965025-qdhmlquieqlvcoor458lgtlh4oao58dv.apps.googleusercontent.com";
 
 const GLogin = () => {
-    const [gAccessToken,setGAccessToken] = useState("")
+  const [gAccessToken, setGAccessToken] = useState("");
   const onSuccess = (res) => {
     console.log("Login Successfull. Current User =>", res);
-    setGAccessToken(res.code)
-    const encURL = encodeURIComponent(res.code)
-    console.log(encURL," is the decoded url")
-   
+    setGAccessToken(res.code);
+    const encURL = encodeURIComponent(res.code);
+    console.log(encURL, " is the decoded url");
   };
-  console.log(gAccessToken,"this is the code token received")
+  console.log(gAccessToken, "this is the code token received");
 
   const onFailure = (res) => {
     console.log("Login failed. Res=> ", res);
