@@ -16,9 +16,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../store/loginSlice";
 import { useNavigate, NavLink } from "react-router-dom";
 import LogoutConfirmAlert from "../components/Alerts/LogoutConfirmAlert";
+import MenuButton from "./UI/MenuListComposition";
+import { MenuList } from "@mui/material";
+import MenuListComposition from "./UI/MenuListComposition";
 
 const pages = [
-  { menuId: 1, menuItem: "Live Status" },
+  {
+    menuId: 1,
+    menuItem: "Live Status",
+    submenu: [
+      { smenuId: 1, sMenuItem: "Live Orders" },
+      { smenuId: 2, sMenuItem: "Customer Wise" },
+    ],
+  },
   { menuId: 2, menuItem: "Customers" },
   { menuId: 3, menuItem: "Merchandisers" },
   { menuId: 4, menuItem: "Suppliers" },
@@ -108,6 +118,7 @@ const NavBar = () => {
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
+              {/* logo part */}
               <Typography
                 variant="h6"
                 noWrap
@@ -121,7 +132,7 @@ const NavBar = () => {
                   SampleTracer
                 </NavLink>
               </Typography>
-
+              {/* menu part */}
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <IconButton
                   size="large"
@@ -161,10 +172,23 @@ const NavBar = () => {
                       <Typography textAlign="center">
                         {page.menuItem}
                       </Typography>
+                      {page.submenu
+                        ? page.submenu.map((item) => (
+                            <MenuList>
+                              <MenuItem key={item.smenuId}>
+                                <Typography textAlign="center">
+                                  {item.sMenuItem}
+                                </Typography>
+                              </MenuItem>
+                            </MenuList>
+                          ))
+                        : ""}
                     </MenuItem>
                   ))}
                 </Menu>
               </Box>
+
+              {/* menu on smaller devices */}
               <Typography
                 variant="h6"
                 noWrap
@@ -192,6 +216,7 @@ const NavBar = () => {
                 ))}
               </Box>
 
+              {/* this is the profile */}
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 // import NavBar from "../components/NavBar";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import BasicCard from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -21,6 +21,7 @@ import { loginActions } from "../store/loginSlice";
 
 import GridItemCard from "../components/UI/GridItemCard";
 import GridContainer from "../components/UI/GridContainer";
+import AddProductGroupForm from "../components/Forms/AddProductGroupForm";
 
 // import { default_url } from "../components/constants";
 
@@ -29,6 +30,21 @@ const HomePage = () => {
   const [initialCheck, setInitialCheck] = useState(true);
   const isAuth = useSelector((state) => state.login.isAuth);
   // const logStatus = useSelector((state) => state.login.logoutStatus);
+  const [addProductGroup, setAddProductGroup] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const addProductGroupHandler = () => {
+    console.log("product initial- ", addProductGroup);
+    setAddProductGroup(true);
+    setOpenModal(true);
+
+    console.log("add product group status - ", addProductGroup);
+    console.log(openModal);
+  };
+
+  const modalCloseHandler = () => {
+    console.log("closehandler");
+    setOpenModal(false);
+  };
   useEffect(() => {
     if (!isAuth) {
       console.log("not");
@@ -126,6 +142,13 @@ const HomePage = () => {
               <Typography>Samples are never late again</Typography>
             </Typography>
           </Box>
+          <Button onClick={addProductGroupHandler}>Add Product group</Button>
+          {addProductGroup && (
+            <AddProductGroupForm
+              addProductGroup={openModal}
+              modalClose={modalCloseHandler}
+            />
+          )}
           <GridContainer>
             <GridItemCard>
               <PieChart />
