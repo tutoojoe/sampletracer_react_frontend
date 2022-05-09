@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import BaseTable from "./Tables/BaseTable";
+import BaseTable from "./BaseTable";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import axios from "axios";
-import { default_url } from "../components/constants";
+import { default_url } from "../constants";
 
 const CustomerTable = () => {
-  const [data, setData] = useState([]);
+  const [customerDdata, setCustomerData] = useState([]);
   useEffect(() => {
     axios.get(`${default_url}/api/customers/`).then((res) => {
       console.log(res);
       console.log(res.data);
-      setData(res.data);
+      setCustomerData(res.data);
     });
   }, []);
 
@@ -57,7 +59,16 @@ const CustomerTable = () => {
   ];
 
   return (
-    <BaseTable columns={columns} data={data} title={"Customers"}></BaseTable>
+    <>
+      {customerDdata.length === 0 && <CircularProgress />}
+      {customerDdata.length > 0 && (
+        <BaseTable
+          columns={columns}
+          data={customerDdata}
+          title={"Customers"}
+        ></BaseTable>
+      )}
+    </>
   );
 };
 

@@ -8,6 +8,9 @@ import HomePage from "./Pages/HomePage";
 import SignIn from "./Pages/SignIn";
 import CustomersPage from "./Pages/CustomersPage";
 import MainNav from "./components/MainNav";
+import MerchandiserPage from "./Pages/MerchandiserPage";
+import StorePage from "./Pages/StorePage";
+import SuppliersPage from "./Pages/SuppliersPage";
 
 function App() {
   return (
@@ -18,7 +21,11 @@ function App() {
           <Route path="register/" element={<Register />} />
           <Route path="signin/" element={<SignIn />} />
           <Route path="customers/" element={<CustomersPage />} />
-          <Route path="google/" element={<GLogin />}></Route>
+          <Route path="merchandisers/" element={<MerchandiserPage />} />
+          <Route path="suppliers/" element={<SuppliersPage />} />
+          <Route path="store/" element={<StorePage />} />
+
+          {/* <Route path="google/" element={<GLogin />}></Route> */}
         </Routes>
       </div>
     </MainNav>

@@ -12,7 +12,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { loginActions } from "../store/loginSlice";
-import CustomerTable from "../components/CustomerTable";
+import CustomerTable from "../components/Tables/CustomerTable";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 

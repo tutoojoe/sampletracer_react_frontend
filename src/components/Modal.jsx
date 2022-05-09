@@ -7,10 +7,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 
 const style = {
-  display: "flex",
-
-  flexDirection: "row",
-  justifyContents: "space-between",
+  // flexDirection: "row",
+  // justifyContents: "space-between",
   alignItems: "center",
   position: "absolute",
   top: "50%",
@@ -20,7 +18,8 @@ const style = {
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 24,
-  p: 4,
+  borderRadius: 2,
+  p: 2,
 };
 
 export default function BasicModal(props) {
@@ -34,19 +33,20 @@ export default function BasicModal(props) {
       >
         <div>
           <Box sx={props.style ? props.style : style}>
-            <div
-              sx={{
-                justifyContents: "flex-end",
-              }}
-            ></div>
-            {props.children}
-            <Button
-              variant="outline"
-              sx={{ ml: 2 }}
-              onClick={props.handleClose}
-            >
-              Close
-            </Button>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography sx={{ ml: 2 }}>
+                <h2>{props.title}</h2>
+              </Typography>
+              <Button
+                variant="outlined"
+                startIcon={<CloseIcon />}
+                sx={{ m: 2 }}
+                onClick={props.handleClose}
+              >
+                Close
+              </Button>
+            </Box>
+            <Box sx={{ p: 1 }}> {props.children}</Box>
           </Box>
         </div>
       </Modal>

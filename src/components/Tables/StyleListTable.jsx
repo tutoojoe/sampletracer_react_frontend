@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import axios from "axios";
 import { default_url } from "../constants";
+import { Grid } from "@mui/material";
 
 const StyleListTable = () => {
   const [data, setData] = useState([]);
@@ -71,12 +72,14 @@ const StyleListTable = () => {
   console.log(data);
 
   return (
-    <MUIDataTable
-      title={"Style Details"}
-      data={data}
-      columns={columns}
-      options={options}
-    />
+    <Grid item xs={12} md={12} xl={12} sx={{ mb: 2 }}>
+      <MUIDataTable
+        title={"Style Details"}
+        data={data}
+        columns={columns}
+        options={options}
+      />
+    </Grid>
   );
 };
 

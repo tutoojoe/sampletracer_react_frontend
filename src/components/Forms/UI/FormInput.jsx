@@ -9,12 +9,10 @@ import { Button, LinearProgress } from "@mui/material";
 import BasicModal from "../Modal";
 import requestAPIs from "../requestAPIs";
 import Alert from "@mui/material/Alert";
-import Fade from "@mui/material/Fade";
 
 const AddProductGroupForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [alert, setAlert] = useState(false);
-  const [fade, setFade] = useState(false);
   const [alertContent, setAlertContent] = useState("");
 
   const formSubmitHandler = (data) => {
@@ -26,26 +24,13 @@ const AddProductGroupForm = (props) => {
         console.log("response", response);
         setIsSubmitting(false);
         setAlert(true);
-        setFade(true);
-        setAlertContent(`Product Group ${response.statusText}`);
-        setTimeout(() => {
-          setFade(false);
-        }, 1500);
-        setTimeout(() => {
-          setAlert(false);
-        }, 1500);
+        setAlertContent(`${response.status} - ${response.statusText}`);
       })
       .catch((error) => {
         console.log("error", error);
         setIsSubmitting(false);
         setAlert(true);
         setAlertContent(error);
-        setTimeout(() => {
-          setFade(false);
-        }, 1500);
-        setTimeout(() => {
-          setAlert(false);
-        }, 1500);
       });
   };
 
@@ -62,7 +47,6 @@ const AddProductGroupForm = (props) => {
 
   return (
     <BasicModal
-      title="Add Product Group"
       modalOpen={props.addProductGroup}
       handleClose={props.modalClose}
     >
@@ -83,11 +67,7 @@ const AddProductGroupForm = (props) => {
         </Button>
         {isSubmitting && <LinearProgress sx={{ mt: 1 }} />}
         {!isSubmitting && alert ? (
-          <Fade in={fade}>
-            <Alert severity="success" sx={{ mt: 1, mb: 1 }}>
-              {alertContent}
-            </Alert>
-          </Fade>
+          <Alert severity="success">{alertContent}</Alert>
         ) : (
           <></>
         )}

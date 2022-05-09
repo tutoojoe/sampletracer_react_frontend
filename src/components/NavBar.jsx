@@ -77,6 +77,15 @@ const NavBar = () => {
     } else if (id === 2) {
       console.log("customers page");
       navigate("customers/");
+    } else if (id === 3) {
+      console.log("Merchandisers page");
+      navigate("merchandisers/");
+    } else if (id === 4) {
+      console.log("supplierspage");
+      navigate("suppliers/");
+    } else if (id === 5) {
+      console.log("store page");
+      navigate("store/");
     }
 
     setAnchorElNav(null);

@@ -22,6 +22,7 @@ import { loginActions } from "../store/loginSlice";
 import GridItemCard from "../components/UI/GridItemCard";
 import GridContainer from "../components/UI/GridContainer";
 import AddProductGroupForm from "../components/Forms/AddProductGroupForm";
+import AddProductForm from "../components/Forms/AddProductForm";
 
 // import { default_url } from "../components/constants";
 
@@ -31,19 +32,30 @@ const HomePage = () => {
   const isAuth = useSelector((state) => state.login.isAuth);
   // const logStatus = useSelector((state) => state.login.logoutStatus);
   const [addProductGroup, setAddProductGroup] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [addProduct, setAddProduct] = useState(false);
+  const [openGroupModal, setOpenGroupModal] = useState(false);
+  const [openProdModal, setOpenProdModal] = useState(false);
   const addProductGroupHandler = () => {
-    console.log("product initial- ", addProductGroup);
+    console.log("product group initial- ", addProductGroup);
     setAddProductGroup(true);
-    setOpenModal(true);
-
+    setOpenGroupModal(true);
     console.log("add product group status - ", addProductGroup);
-    console.log(openModal);
+    console.log(openGroupModal);
+  };
+
+  const addProductHandler = () => {
+    console.log("product add ", addProduct);
+    setAddProduct(true);
+    setOpenProdModal(true);
+
+    console.log("add product group status - ", addProduct);
+    console.log(openProdModal);
   };
 
   const modalCloseHandler = () => {
     console.log("closehandler");
-    setOpenModal(false);
+    setOpenGroupModal(false);
+    setOpenProdModal(false);
   };
   useEffect(() => {
     if (!isAuth) {
@@ -145,7 +157,14 @@ const HomePage = () => {
           <Button onClick={addProductGroupHandler}>Add Product group</Button>
           {addProductGroup && (
             <AddProductGroupForm
-              addProductGroup={openModal}
+              addProductGroup={openGroupModal}
+              modalClose={modalCloseHandler}
+            />
+          )}
+          <Button onClick={addProductHandler}>Add Product</Button>
+          {addProduct && (
+            <AddProductForm
+              addProduct={openProdModal}
               modalClose={modalCloseHandler}
             />
           )}
