@@ -5,38 +5,27 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { default_url } from "../components/constants";
-// import axios from "axios";
 import axios from "../components/axios";
 import requestAPIs from "../components/requestAPIs";
-
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { NavLink, useNavigate } from "react-router-dom";
-
 import { useSelector, useDispatch } from "react-redux";
-import { authActions } from "../store/auth";
 import { loginActions } from "../store/loginSlice";
 import { userActions } from "../store/userSlice";
-
 import { getUserProfile } from "../store/userActions";
-
-// import BasicAlerts from "../components/BasicAlerts";
-// import * as React from "react";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import CircularProgress from "@mui/material/CircularProgress";
-import LinearProgress from "@mui/material/LinearProgress";
+import { LinearProgress } from "@mui/material";
+import { socket } from "../components/socketIO";
+
 const theme = createTheme();
 
 function Copyright(props) {
@@ -48,7 +37,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="#">
         SampleTracer
       </Link>{" "}
       {new Date().getFullYear()}
@@ -62,9 +51,18 @@ const SignIn = () => {
   const [loginStatus, setLoginStatus] = useState("");
   const [alertContent, setAlertContent] = useState("");
   const navigate = useNavigate();
-  // const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const { isLoading, isAuth, error } = useSelector((state) => state.login);
   const dispatch = useDispatch();
+
+  const socketConnect = async () => {
+    const connect = await socket.on("connect", () => {
+      console.log("connected inside frontend client");
+      socket.emit("my_event", { data: "connected inside client" });
+    });
+    const message = await socket.on("my_response", (msg) => {
+      console.log("my-response >", msg.data, msg.count);
+    });
+  };
 
   const formSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
@@ -92,18 +90,17 @@ const SignIn = () => {
           console.log(res.data.user, "this is the user details"),
           dispatch(loginActions.loginSuccess(res.data)),
           dispatch(userActions.getUserSuccess(res.data)),
-          // dispatch(authActions.login(res.data)),
           dispatch(getUserProfile()),
           setLoginStatus("success"),
           setAlertContent("Login Successful"),
           setAlert(true),
-          // console.log("login successful"),
           // Access token and refresh token management.
           sessionStorage.setItem("accessJWT", res.data.access_token),
           localStorage.setItem(
             "userRefresh",
             JSON.stringify({ refreshJWT: res.data.refresh_token })
           ),
+          socketConnect(),
           setTimeout(() => {
             navigate("/");
           }, 1500)
@@ -111,23 +108,8 @@ const SignIn = () => {
       )
       .catch(
         (err) => (
-          // console.log("error console"),
-          // console.log("error", err),
-          // console.log("response", err.response),
-          // console.log("-----"),
           console.log("error message -->", err.message),
-          // console.log(" responsetext below-----"),
-          // console.log("error responsetxt -->", err.responseText[0]),
-          // console.log(" request.responsetext below-----"),
-          // console.log(
-          //   "error request.responsetxt -->",
-          //   err.request.responseText
-          // ),
-          // console.log(" response.data below-----"),
           dispatch(loginActions.loginFail(err.message))
-          // setLoginStatus("error"),
-          // setAlertContent("Something went wrong..!! Please try again."),
-          // setAlert(true)
         )
       );
   };
@@ -159,8 +141,6 @@ const SignIn = () => {
             <Box sx={{ mt: 3 }}>
               {/* form inputs */}
               <Grid container spacing={2}>
-                {/* form first name */}
-
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
@@ -200,10 +180,6 @@ const SignIn = () => {
                 <Box sx={{ width: "100%" }}>
                   <LinearProgress />
                 </Box>
-                // <Box sx={{ display: "flex" }}>
-
-                //   <CircularProgress />
-                // </Box>
               )}
               {error && <Alert severity="warning">{error}</Alert>}
               {!isLoading && alert ? (

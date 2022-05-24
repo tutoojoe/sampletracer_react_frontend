@@ -22,9 +22,9 @@ const requestAPIs = {
   suppliers: `api/suppliers/`,
   supplierDetail: `api/suppliers/${id}/`,
   token: `api/token/`,
-  tokenverify: `api/token/verify/`,
+  tokenverify: `api/user/token/verify/`,
 
-  tokenrefresh: `api/token/refresh/`,
+  tokenrefresh: `api/user/token/refresh/`,
 
   dashboard: `api/dashboard/`,
   users: `api/users/`,

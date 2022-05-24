@@ -3,16 +3,32 @@ import MUIDataTable from "mui-datatables";
 import axios from "axios";
 import { default_url } from "../constants";
 import { Grid } from "@mui/material";
+import { socket } from "../socketIO";
 
 const StyleListTable = () => {
   const [data, setData] = useState([]);
+  const [productUpdate, setProductUpdate] = useState(false);
+  // socket.on("product_added", (msg) => {
+  //   console.log("retrieving styles after product add" + msg);
+  //   getStyles();
+  // });
 
+  const getStyles = async () => {
+    const res = await axios.get(`${default_url}/api/products/`);
+
+    console.log(res);
+    console.log(res.data);
+    setData(res.data);
+    setProductUpdate(false);
+  };
   useEffect(() => {
-    axios.get(`${default_url}/api/products/`).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      setData(res.data);
+    socket.on("product_added", (msg) => {
+      console.log("retrieving styles after product add", msg.msg);
+      getStyles();
     });
+  });
+  useEffect(() => {
+    getStyles();
   }, []);
   //   const columns = ["Name", "Company", "City", "State"];
   const columns = [

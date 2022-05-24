@@ -10,6 +10,7 @@ import BasicModal from "../Modal";
 import requestAPIs from "../requestAPIs";
 import Alert from "@mui/material/Alert";
 import Fade from "@mui/material/Fade";
+import { socket } from "../socketIO";
 
 const AddProductGroupForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,6 +29,7 @@ const AddProductGroupForm = (props) => {
         setAlert(true);
         setFade(true);
         setAlertContent(`Product Group ${response.statusText}`);
+        socket.emit("product_group_add", { data: "group added" });
         setTimeout(() => {
           setFade(false);
         }, 1500);

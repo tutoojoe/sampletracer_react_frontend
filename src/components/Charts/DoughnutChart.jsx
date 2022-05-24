@@ -2,6 +2,7 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
+import GridItemCard from "../UI/GridItemCard";
 // import { margin } from "@mui/system";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -34,10 +35,12 @@ const DoughnutChart = () => {
   };
 
   return (
-    <Box sx={{ boxShadow: 2, padding: 3 }}>
-      <Typography variant="body1">Styles Per customer</Typography>
-      <Doughnut data={data} />
-    </Box>
+    <GridItemCard>
+      <Box sx={{ boxShadow: 2, padding: 3 }}>
+        <Typography variant="body1">Styles Per customer</Typography>
+        <Doughnut data={data} />
+      </Box>
+    </GridItemCard>
   );
 };
 

@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
@@ -37,14 +36,10 @@ export default function BasicModal(props) {
               <Typography sx={{ ml: 2 }}>
                 <h2>{props.title}</h2>
               </Typography>
-              <Button
-                variant="outlined"
-                startIcon={<CloseIcon />}
-                sx={{ m: 2 }}
-                onClick={props.handleClose}
-              >
-                Close
-              </Button>
+
+              <IconButton aria-label="close modal" onClick={props.handleClose}>
+                <CloseIcon />
+              </IconButton>
             </Box>
             <Box sx={{ p: 1 }}> {props.children}</Box>
           </Box>

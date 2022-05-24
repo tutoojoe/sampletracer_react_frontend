@@ -17,6 +17,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { red } from "@mui/material/colors";
+import { socket } from "../../components/socketIO";
 
 const AddProductForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,6 +50,7 @@ const AddProductForm = (props) => {
 
   useEffect(() => {
     // get productgroups
+    socket.emit("addproduct", { msg: "adding product" });
     axios
       .get(requestAPIs.productgroups)
       .then((res) => {
@@ -94,6 +96,7 @@ const AddProductForm = (props) => {
         console.log(resultdata);
         setIsSubmitting(false);
         setAlertContent(`Product successfully ${resultdata.statusText}`);
+
         setAlert(true);
         setFade(true);
         setTimeout(() => {

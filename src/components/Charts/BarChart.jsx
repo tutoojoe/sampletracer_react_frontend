@@ -11,6 +11,7 @@ import {
 import { Bar } from "react-chartjs-2";
 // import faker from "faker";
 import { Box, Typography } from "@mui/material";
+import GridItemCard from "../UI/GridItemCard";
 
 ChartJS.register(
   CategoryScale,
@@ -65,10 +66,12 @@ const BarChart = () => {
   };
 
   return (
-    <Box sx={{ boxShadow: 2, padding: 3, alignContent: "stretch" }}>
-      <Typography variant="body1"> New vs Delivered </Typography>
-      <Bar options={options} data={data} />
-    </Box>
+    <GridItemCard>
+      <Box sx={{ boxShadow: 2, padding: 3, alignContent: "stretch" }}>
+        <Typography variant="body1"> New vs Delivered </Typography>
+        <Bar options={options} data={data} />
+      </Box>
+    </GridItemCard>
   );
 };
 

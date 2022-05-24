@@ -15,6 +15,7 @@ import { loginActions } from "../store/loginSlice";
 import CustomerTable from "../components/Tables/CustomerTable";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
 
 const CustomersPage = () => {
   const navigate = useNavigate();
@@ -28,28 +29,11 @@ const CustomersPage = () => {
 
   return (
     <>
-      {/* {!isAuth && navigate("/")} */}
       {isAuth && (
-        <Container style={{ paddingTop: 5 }}>
-          <Box
-            sx={{
-              alignContent: "center",
-              boxShadow: 2,
-              // marginTop: 3,
-              marginBlock: 3,
-              padding: 3,
-            }}
-          >
-            <Typography variant="h4">Customers</Typography>
-          </Box>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12} xl={12}>
-              {/* <StyleListTable /> */}
-              <CustomerTable />
-            </Grid>
-          </Grid>
-        </Container>
+        <>
+          <PageHeader pagetitle="Customers Page" />
+          <CustomerTable />
+        </>
       )}
     </>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 
 const GridItemCard = (props) => {
   return (
@@ -9,7 +9,7 @@ const GridItemCard = (props) => {
       md={props.md ? props.md : 6}
       xl={props.xl ? props.xl : 4}
     >
-      {props.children}
+      <Paper elevation={2}>{props.children}</Paper>
     </Grid>
   );
 };

@@ -2,6 +2,8 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
+
+import GridItemCard from "../UI/GridItemCard";
 // import { margin } from "@mui/system";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -31,10 +33,12 @@ const PieChart = () => {
   };
 
   return (
-    <Box sx={{ boxShadow: 2, padding: 3 }}>
-      <Typography variant="body1"> Live Styles Overview </Typography>
-      <Pie data={data} />
-    </Box>
+    <GridItemCard>
+      <Box sx={{ boxShadow: 2, padding: 3 }}>
+        <Typography variant="body1"> Live Styles Overview </Typography>
+        <Pie data={data} />
+      </Box>
+    </GridItemCard>
   );
 };
 

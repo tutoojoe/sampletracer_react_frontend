@@ -4,6 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import axios from "axios";
 import { default_url } from "../constants";
+import { Box, Container } from "@mui/material";
 
 const CustomerTable = () => {
   const [customerDdata, setCustomerData] = useState([]);
@@ -60,7 +61,13 @@ const CustomerTable = () => {
 
   return (
     <>
-      {customerDdata.length === 0 && <CircularProgress />}
+      {customerDdata.length === 0 && (
+        <Container>
+          <Box>
+            <CircularProgress />
+          </Box>
+        </Container>
+      )}
       {customerDdata.length > 0 && (
         <BaseTable
           columns={columns}

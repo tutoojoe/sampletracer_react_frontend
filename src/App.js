@@ -11,7 +11,8 @@ import MainNav from "./components/MainNav";
 import MerchandiserPage from "./Pages/MerchandiserPage";
 import StorePage from "./Pages/StorePage";
 import SuppliersPage from "./Pages/SuppliersPage";
-
+import io from "socket.io-client";
+const socket = io("http://localhost:8000");
 function App() {
   return (
     <MainNav>

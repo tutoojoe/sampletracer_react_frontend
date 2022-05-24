@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 // import NavBar from "../components/NavBar";
-import { Button, Grid } from "@mui/material";
-import BasicCard from "../components/Card";
+import { Button, Paper } from "@mui/material";
+// import BasicCard from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import StyleListTable from "../components/Tables/StyleListTable";
+// import StyleListTable from "../components/Tables/StyleListTable";
 import Box from "@mui/material/Box";
 import PieChart from "../components/Charts/PieChart";
 // import LogoutConfirmAlert from "../components/Alerts/LogoutConfirmAlert";
@@ -19,14 +19,28 @@ import axios from "../components/axios";
 import requestAPIs from "../components/requestAPIs";
 import { loginActions } from "../store/loginSlice";
 
-import GridItemCard from "../components/UI/GridItemCard";
 import GridContainer from "../components/UI/GridContainer";
 import AddProductGroupForm from "../components/Forms/AddProductGroupForm";
 import AddProductForm from "../components/Forms/AddProductForm";
+import { socket } from "../components/socketIO";
+import StyleListTable from "../components/Tables/StyleListTable";
+// import io from "socket.io-client";
 
-// import { default_url } from "../components/constants";
+// // // const socket = io("http://localhost:8000");
+// // // const io = require("socket.io-client");
+// const socket = io("http://localhost:8000");
+// // import { default_url } from "../components/constants";
+// socket.on("connect", () => {
+//   console.log("connected inside frontend client");
+//   socket.emit("my_event", { data: "connected inside client" });
+// });
+// socket.on("my_response", (msg) => {
+//   console.log("my-response >", msg.data, msg.count);
+// });
 
 const HomePage = () => {
+  const [msg, setMsg] = useState("");
+  const [chat, setChat] = useState([]);
   const dispatch = useDispatch();
   const [initialCheck, setInitialCheck] = useState(true);
   const isAuth = useSelector((state) => state.login.isAuth);
@@ -102,9 +116,7 @@ const HomePage = () => {
         setInitialCheck(false);
       }
     }
-  }, [isAuth]);
-  // const userdetails = useSelector((state) => state.auth.loggedUser);
-
+  }, [isAuth, dispatch]);
   return (
     <div>
       {!isAuth && initialCheck && (
@@ -119,33 +131,52 @@ const HomePage = () => {
         </Backdrop>
       )}
       {/* {isAuth && logStatus && <LogoutConfirmAlert />} */}
-
       {!isAuth && (
         <Container>
           <Box
             sx={{
               marginTop: 8,
-              padding: 2,
+
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: 2,
+
               // bgcolor: "primary.main",
             }}
           >
-            <Typography variant="h3" marginTop={3}>
-              Welcome to Sample Tracer
-              <Typography>Please Sign In to continue</Typography>
-            </Typography>
-
-            <NavLink to="/signin" variant="body2">
-              Click here to Sign in
-            </NavLink>
+            <Paper
+              elevation={3}
+              sx={{
+                alignItems: "center",
+                width: "20rem",
+                padding: 2,
+                // bgcolor: "ivory",
+                height: "10rem",
+              }}
+            >
+              <Typography variant="h3" marginTop={3}>
+                Sample Tracer
+                <Typography
+                  variant="body2"
+                  marginTop={3}
+                  sx={{ paddingLeft: 2, paddingRight: 2 }}
+                >
+                  Please Sign In to continue
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ paddingLeft: 2, paddingRight: 2 }}
+                >
+                  <NavLink to="/signin" variant="body2">
+                    Click here to Sign in
+                  </NavLink>
+                </Typography>
+              </Typography>
+            </Paper>
           </Box>
         </Container>
       )}
-
       {isAuth && (
         <Container>
           <Box>
@@ -169,19 +200,26 @@ const HomePage = () => {
             />
           )}
           <GridContainer>
+            <PieChart />
+            <DoughnutChart />
+            <BarChart />
+            <StyleListTable />
+          </GridContainer>
+          {/* <GridContainer>
             <GridItemCard>
               <PieChart />
+            </GridItemCard>
+
+            <GridItemCard>
+              <DoughnutChart />
             </GridItemCard>
             <GridItemCard>
               <BarChart />
             </GridItemCard>
-            <GridItemCard>
-              <DoughnutChart />
-            </GridItemCard>
             <GridItemCard xs={12} md={12} xl={12}>
               <StyleListTable />
             </GridItemCard>
-          </GridContainer>
+          </GridContainer> */}
         </Container>
       )}
     </div>
