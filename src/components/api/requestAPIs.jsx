@@ -21,7 +21,7 @@ const requestAPIs = {
   accessoriesDetail: `api/products/accessories/${id}/`,
   suppliers: `api/suppliers/`,
   supplierDetail: `api/suppliers/${id}/`,
-  token: `api/token/`,
+  // token: `api/token/`,
   tokenverify: `api/user/token/verify/`,
 
   tokenrefresh: `api/user/token/refresh/`,

@@ -12,19 +12,26 @@ import MerchandiserPage from "./Pages/MerchandiserPage";
 import StorePage from "./Pages/StorePage";
 import SuppliersPage from "./Pages/SuppliersPage";
 import io from "socket.io-client";
+import Layout from "./components/Layout";
+import RequireAuth from "./components/RequireAuth";
 const socket = io("http://localhost:8000");
 function App() {
   return (
     <MainNav>
       <div className="App">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Layout />}>
+            <Route element={<RequireAuth />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="suppliers/" element={<SuppliersPage />} />
+            </Route>
+            <Route path="customers/" element={<CustomersPage />} />
+            <Route path="merchandisers/" element={<MerchandiserPage />} />
+            <Route path="store/" element={<StorePage />} />
+          </Route>
           <Route path="register/" element={<Register />} />
+
           <Route path="signin/" element={<SignIn />} />
-          <Route path="customers/" element={<CustomersPage />} />
-          <Route path="merchandisers/" element={<MerchandiserPage />} />
-          <Route path="suppliers/" element={<SuppliersPage />} />
-          <Route path="store/" element={<StorePage />} />
 
           {/* <Route path="google/" element={<GLogin />}></Route> */}
         </Routes>

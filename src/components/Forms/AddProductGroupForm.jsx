@@ -4,19 +4,22 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import axios from "../../components/axios";
+import axios from "../api/axios";
 import { Button, LinearProgress } from "@mui/material";
-import BasicModal from "../Modal";
-import requestAPIs from "../requestAPIs";
+import BasicModal from "../Modals/BasicModal";
+import requestAPIs from "../api/requestAPIs";
 import Alert from "@mui/material/Alert";
 import Fade from "@mui/material/Fade";
-import { socket } from "../socketIO";
+import { socket } from "../server/socketIO";
 
 const AddProductGroupForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [alert, setAlert] = useState(false);
   const [fade, setFade] = useState(false);
   const [alertContent, setAlertContent] = useState("");
+  socket.on("product_group_added", (msg) => {
+    console.log("Product groupadded. Msg>", msg);
+  });
 
   const formSubmitHandler = (data) => {
     console.log("form submitted - data= ", data);

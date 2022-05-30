@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
-import axios from "axios";
-import { default_url } from "../constants";
-import { Grid } from "@mui/material";
-import { socket } from "../socketIO";
+import axios from "../../components/api/axios";
+import requestAPIs from "../../components/api/requestAPIs";
+
+import { Grid, CircularProgress, Box } from "@mui/material";
+import { socket } from "../server/socketIO";
 
 const StyleListTable = () => {
   const [data, setData] = useState([]);
+  const [newProductAdded, setNewProductAdded] = useState(false);
   const [productUpdate, setProductUpdate] = useState(false);
+
   // socket.on("product_added", (msg) => {
   //   console.log("retrieving styles after product add" + msg);
   //   getStyles();
   // });
 
   const getStyles = async () => {
-    const res = await axios.get(`${default_url}/api/products/`);
-
-    console.log(res);
-    console.log(res.data);
+    setProductUpdate(true);
+    const res = await axios.get(requestAPIs.products);
     setData(res.data);
     setProductUpdate(false);
+    setNewProductAdded(false);
   };
   useEffect(() => {
     socket.on("product_added", (msg) => {
-      console.log("retrieving styles after product add", msg.msg);
-      getStyles();
+      setNewProductAdded(true);
     });
   });
   useEffect(() => {
     getStyles();
-  }, []);
-  //   const columns = ["Name", "Company", "City", "State"];
+  }, [newProductAdded]);
+
   const columns = [
     {
       name: "style_no",
@@ -84,17 +85,19 @@ const StyleListTable = () => {
   const options = {
     filterType: "checkbox",
   };
-
   console.log(data);
 
   return (
     <Grid item xs={12} md={12} xl={12} sx={{ mb: 2 }}>
-      <MUIDataTable
-        title={"Style Details"}
-        data={data}
-        columns={columns}
-        options={options}
-      />
+      {productUpdate && <CircularProgress />}
+      {!productUpdate && (
+        <MUIDataTable
+          title={"Style Details"}
+          data={data}
+          columns={columns}
+          options={options}
+        />
+      )}
     </Grid>
   );
 };

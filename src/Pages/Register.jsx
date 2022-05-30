@@ -13,8 +13,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { default_url } from "../components/constants";
-import axios from "axios";
+import axios from "../components/api/axios";
+import requestAPIs from "../components/api/requestAPIs";
+
+// import { default_url } from "../components/constants";
+// import axios from "axios";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -25,6 +28,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
 import Alert from "@mui/material/Alert";
+import { LinearProgress } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -47,8 +51,9 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [alert, setAlert] = useState(false);
-  const [regStatus, setRegStatus] = useState("");
+  const [regStatus, setRegStatus] = useState(false);
   const [alertContent, setAlertContent] = useState("");
   const navigate = useNavigate();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
@@ -87,30 +92,37 @@ export default function Register() {
     watch,
     formState: { errors },
   } = useForm(validationOpt);
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
     console.log(data);
-    axios
-      .post(`${default_url}/api/user_registration/`, data)
-      .then(
-        (res) => (
-          console.log(res.data),
-          console.log(res.data.user),
-          console.log(res),
-          dispatch(authActions.login(res.data)),
-          setRegStatus("success"),
-          setAlertContent("Registration Successful"),
-          setAlert(true),
-          setTimeout(() => {
-            navigate("/");
-          }, 1500)
-        )
-      )
-      .catch(
-        (error) => console.log(error),
-        setRegStatus("error"),
-        setAlertContent("Some error..!!"),
-        setAlert(true)
-      );
+
+    try {
+      const res = await axios.post(requestAPIs.register, data);
+      console.log(res.data);
+      console.log(res.data.user);
+      console.log(res);
+      dispatch(authActions.login(res.data));
+      setIsSubmitting(false);
+      setRegStatus("success");
+      setAlertContent("Registration Successful");
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+        setAlertContent("");
+
+        navigate("/");
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      setIsSubmitting(false);
+      setRegStatus("error");
+      setAlertContent("Some error..!!");
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+        setAlertContent("");
+      }, 1500);
+    }
   };
 
   return (
@@ -183,20 +195,7 @@ export default function Register() {
                     helperText={errors?.email ? errors.email.message : null}
                   />
                 </Grid>
-                {/* ---> removed this and added email as login parameter..
-                 <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    {...register("username")}
-                    autoComplete="username"
-                    error={!!errors?.username}
-                    helperText={
-                      errors?.username ? errors.username.message : null
-                    }
-                  />
-                </Grid> */}
+
                 <Grid item xs={12}>
                   <TextField
                     // required
@@ -236,8 +235,8 @@ export default function Register() {
               >
                 Register
               </Button>
-
-              {alert ? (
+              {isSubmitting && <LinearProgress />}
+              {!isSubmitting && alert ? (
                 <Alert severity={regStatus}>{alertContent}</Alert>
               ) : (
                 <></>

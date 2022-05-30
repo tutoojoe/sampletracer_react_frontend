@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import BaseTable from "./BaseTable";
 import CircularProgress from "@mui/material/CircularProgress";
-
-import axios from "axios";
-import { default_url } from "../constants";
+import axios from "../../components/api/axios";
+import requestAPIs from "../../components/api/requestAPIs";
 import { Box, Container } from "@mui/material";
 
 const CustomerTable = () => {
   const [customerDdata, setCustomerData] = useState([]);
+  const getCustomerList = async () => {
+    try {
+      const response = await axios.get(requestAPIs.customers);
+      console.log(response);
+      console.log(response.data);
+      setCustomerData(response.data);
+    } catch (error) {
+      console.log("error in fetching customers list. Error:> ", error);
+    }
+  };
   useEffect(() => {
-    axios.get(`${default_url}/api/customers/`).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      setCustomerData(res.data);
-    });
+    getCustomerList();
   }, []);
 
   const columns = [

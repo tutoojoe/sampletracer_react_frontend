@@ -8,6 +8,10 @@ import GridItemCard from "../UI/GridItemCard";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = () => {
+  const handleClick = (e) => {
+    console.log("event", e);
+    console.log("event", e.target);
+  };
   const data = {
     labels: ["cust1", "cust2", "cust3", "cust4"],
     datasets: [
@@ -34,11 +38,17 @@ const DoughnutChart = () => {
     ],
   };
 
+  const options = {
+    interaction: {
+      mode: "nearest",
+    },
+  };
+
   return (
     <GridItemCard>
       <Box sx={{ boxShadow: 2, padding: 3 }}>
         <Typography variant="body1">Styles Per customer</Typography>
-        <Doughnut data={data} />
+        <Doughnut data={data} options={options} onClick={handleClick} />
       </Box>
     </GridItemCard>
   );

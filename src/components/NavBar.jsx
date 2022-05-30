@@ -29,7 +29,14 @@ const pages = [
       { smenuId: 2, sMenuItem: "Customer Wise" },
     ],
   },
-  { menuId: 2, menuItem: "Customers" },
+  {
+    menuId: 2,
+    menuItem: "Customers",
+    submenu: [
+      { smenuId: 1, sMenuItem: "View Customers" },
+      { smenuId: 2, sMenuItem: "Add Customer" },
+    ],
+  },
   { menuId: 3, menuItem: "Merchandisers" },
   { menuId: 4, menuItem: "Suppliers" },
   { menuId: 5, menuItem: "Store" },

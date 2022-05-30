@@ -4,10 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import axios from "../axios";
+import axios from "../api/axios";
 import { Button, LinearProgress, Fade, Stack } from "@mui/material";
-import BasicModal from "../Modal";
-import requestAPIs from "../requestAPIs";
+import BasicModal from "../Modals/BasicModal";
+import requestAPIs from "../api/requestAPIs";
 import Alert from "@mui/material/Alert";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,7 +17,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { red } from "@mui/material/colors";
-import { socket } from "../../components/socketIO";
+import { socket } from "../server/socketIO";
 
 const AddProductForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -259,6 +259,26 @@ const AddProductForm = (props) => {
             </TextField>
           </Stack>
           <Stack direction="row" spacing={2} justifyContent="space-between">
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Details Received on"
+                {...register("details_received_date")}
+                mask="____-__-__"
+                inputFormat="yyyy-MM-dd"
+                format="yyyy-MM-dd"
+                value={detailRecdDate}
+                onChange={(newValue) => {
+                  setDetailRecdDate(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+                error={!!errors?.details_received_date}
+                helperText={
+                  errors?.details_received_date
+                    ? errors.details_received_date.message
+                    : null
+                }
+              />
+            </LocalizationProvider>
             <LocalizationProvider
               dateAdapter={AdapterDateFns}
               sx={{ width: "10rem" }}
@@ -277,27 +297,6 @@ const AddProductForm = (props) => {
                 error={!!errors?.delivery_date}
                 helperText={
                   errors?.delivery_date ? errors.delivery_date.message : null
-                }
-              />
-            </LocalizationProvider>
-
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Details Received on"
-                {...register("details_received_date")}
-                mask="____-__-__"
-                inputFormat="yyyy-MM-dd"
-                format="yyyy-MM-dd"
-                value={detailRecdDate}
-                onChange={(newValue) => {
-                  setDetailRecdDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-                error={!!errors?.details_received_date}
-                helperText={
-                  errors?.details_received_date
-                    ? errors.details_received_date.message
-                    : null
                 }
               />
             </LocalizationProvider>

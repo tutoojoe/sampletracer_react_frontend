@@ -1,25 +1,25 @@
 import { createRoot } from "react-dom/client";
-
 import React from "react";
 // import ReactDOM from "react-dom";
-
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
 import store from "./store/Store";
-
 import { Provider } from "react-redux";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/*" element={<App />}></Route>
+        </Routes>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
 );
 
 // the below codes are applicable in react version17

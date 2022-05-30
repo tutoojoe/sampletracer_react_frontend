@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import BaseTable from "./BaseTable";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import axios from "../axios";
-import requestAPIs from "../requestAPIs";
+import axios from "../../components/api/axios";
+import requestAPIs from "../../components/api/requestAPIs";
 
 const SupplierTable = () => {
   const [supplierData, setSupplierData] = useState([]);

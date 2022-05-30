@@ -9,12 +9,10 @@ const SuppliersPage = () => {
 
   return (
     <>
-      {isAuth && (
-        <>
-          <PageHeader pagetitle="Suppliers Page" />
-          <SupplierTable />
-        </>
-      )}
+      <>
+        <PageHeader pagetitle="Suppliers Page" />
+        <SupplierTable />
+      </>
     </>
   );
 };

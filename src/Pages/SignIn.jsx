@@ -11,12 +11,12 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "../components/axios";
-import requestAPIs from "../components/requestAPIs";
+import axios from "../components/api/axios";
+import requestAPIs from "../components/api/requestAPIs";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loginActions } from "../store/loginSlice";
 import { userActions } from "../store/userSlice";
@@ -24,7 +24,7 @@ import { getUserProfile } from "../store/userActions";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { LinearProgress } from "@mui/material";
-import { socket } from "../components/socketIO";
+import { socket } from "../components/server/socketIO";
 
 const theme = createTheme();
 
@@ -53,16 +53,16 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { isLoading, isAuth, error } = useSelector((state) => state.login);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
-  const socketConnect = async () => {
-    const connect = await socket.on("connect", () => {
-      console.log("connected inside frontend client");
-      socket.emit("my_event", { data: "connected inside client" });
-    });
-    const message = await socket.on("my_response", (msg) => {
-      console.log("my-response >", msg.data, msg.count);
-    });
-  };
+  socket.on("connect", () => {
+    console.log("connected inside frontend client");
+    socket.emit("my_event", { data: "connected inside client" });
+  });
+  socket.on("my_response", (msg) => {
+    console.log("my-response >", msg.data, msg.count);
+  });
 
   const formSchema = Yup.object().shape({
     email: Yup.string().required("Email is required"),
@@ -82,7 +82,6 @@ const SignIn = () => {
     console.log(data);
     dispatch(loginActions.loginPending());
     axios
-      // .post(`${default_url}/api/user/login/`, data)
       .post(requestAPIs.login, data)
       .then(
         (res) => (
@@ -100,15 +99,15 @@ const SignIn = () => {
             "userRefresh",
             JSON.stringify({ refreshJWT: res.data.refresh_token })
           ),
-          socketConnect(),
           setTimeout(() => {
-            navigate("/");
+            navigate(from, { replace: true });
           }, 1500)
         )
       )
       .catch(
         (err) => (
           console.log("error message -->", err.message),
+          console.log("status text", err),
           dispatch(loginActions.loginFail(err.message))
         )
       );

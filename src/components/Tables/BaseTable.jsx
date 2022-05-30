@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
-import axios from "axios";
-import { default_url } from "../constants";
 import { Grid } from "@mui/material";
 import Container from "@mui/material/Container";
 

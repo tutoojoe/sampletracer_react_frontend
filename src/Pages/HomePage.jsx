@@ -15,15 +15,16 @@ import DoughnutChart from "../components/Charts/DoughnutChart";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 // import axios from "axios";
-import axios from "../components/axios";
-import requestAPIs from "../components/requestAPIs";
+import axios from "../components/api/axios";
+import requestAPIs from "../components/api/requestAPIs";
 import { loginActions } from "../store/loginSlice";
 
 import GridContainer from "../components/UI/GridContainer";
 import AddProductGroupForm from "../components/Forms/AddProductGroupForm";
 import AddProductForm from "../components/Forms/AddProductForm";
-import { socket } from "../components/socketIO";
+import { socket } from "../components/server/socketIO";
 import StyleListTable from "../components/Tables/StyleListTable";
+import ElasticSearch from "../components/ElasticSearch";
 // import io from "socket.io-client";
 
 // // // const socket = io("http://localhost:8000");
@@ -75,22 +76,23 @@ const HomePage = () => {
     if (!isAuth) {
       console.log("not");
 
-      const accessToken = sessionStorage?.getItem("accessJWT");
-      const refreshToken = JSON.parse(localStorage?.getItem("userRefresh"));
+      const accessToken = sessionStorage?.getItem("accessJWT")
+        ? sessionStorage.getItem("accessJWT")
+        : null;
+      const refreshToken = JSON.parse(localStorage?.getItem("userRefresh"))
+        ? JSON.parse(localStorage?.getItem("userRefresh"))
+        : null;
       if (accessToken && refreshToken) {
-        console.log(accessToken);
-        console.log("refresh token", refreshToken);
-        console.log("refresh token", refreshToken["refreshJWT"]);
+        // console.log(accessToken, "this is access token");
+        // console.log("refresh token", refreshToken);
+        // console.log("refresh token", refreshToken["refreshJWT"]);
 
         axios
-          // .post(`${default_url}/api/user/token/verify/`, {
-          .post(requestAPIs.tokenverify, {
-            token: `${accessToken}`,
-          })
+          .post(requestAPIs.tokenverify, { token: `${accessToken}` })
           .then(function (response) {
             console.log("success response", response);
             if (response.status === 200) {
-              console.log("valid key, authorizaition successful");
+              console.log("valid access key, authorizaition successful");
               dispatch(loginActions.loginSuccess());
             }
           })
@@ -103,7 +105,7 @@ const HomePage = () => {
               })
               .then((response) => {
                 console.log(response);
-                sessionStorage.setItem("accessJWT", response.data.access_token);
+                sessionStorage.setItem("accessJWT", response.data.access);
                 dispatch(loginActions.loginSuccess());
               })
               .catch((error) => {
@@ -185,24 +187,37 @@ const HomePage = () => {
               <Typography>Samples are never late again</Typography>
             </Typography>
           </Box>
-          <Button onClick={addProductGroupHandler}>Add Product group</Button>
-          {addProductGroup && (
-            <AddProductGroupForm
-              addProductGroup={openGroupModal}
-              modalClose={modalCloseHandler}
-            />
-          )}
-          <Button onClick={addProductHandler}>Add Product</Button>
-          {addProduct && (
-            <AddProductForm
-              addProduct={openProdModal}
-              modalClose={modalCloseHandler}
-            />
-          )}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              border: 1,
+              borderRadius: 1,
+              borderColor: "primary.main",
+              padding: 2,
+              marginBlock: 2,
+            }}
+          >
+            <Button onClick={addProductGroupHandler}>Add Product group</Button>
+            {addProductGroup && (
+              <AddProductGroupForm
+                addProductGroup={openGroupModal}
+                modalClose={modalCloseHandler}
+              />
+            )}
+            <Button onClick={addProductHandler}>Add Product</Button>
+            {addProduct && (
+              <AddProductForm
+                addProduct={openProdModal}
+                modalClose={modalCloseHandler}
+              />
+            )}
+          </Box>
           <GridContainer>
+            {/* <ElasticSearch /> */}
             <PieChart />
             <DoughnutChart />
-            <BarChart />
+            {/* <BarChart /> */}
             <StyleListTable />
           </GridContainer>
           {/* <GridContainer>
