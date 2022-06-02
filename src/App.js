@@ -14,6 +14,7 @@ import SuppliersPage from "./Pages/SuppliersPage";
 import io from "socket.io-client";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
+import StyleDetail from "./Pages/StyleDetail";
 const socket = io("http://localhost:8000");
 function App() {
   return (
@@ -24,10 +25,11 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route path="/" element={<HomePage />} />
               <Route path="suppliers/" element={<SuppliersPage />} />
+              <Route path="store/" element={<StorePage />} />
+              <Route path="products/:prodId" element={<StyleDetail />} />
             </Route>
             <Route path="customers/" element={<CustomersPage />} />
             <Route path="merchandisers/" element={<MerchandiserPage />} />
-            <Route path="store/" element={<StorePage />} />
           </Route>
           <Route path="register/" element={<Register />} />
 

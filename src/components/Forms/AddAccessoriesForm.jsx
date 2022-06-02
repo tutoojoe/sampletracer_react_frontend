@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Fade,
-  Stack,
   Button,
   MenuItem,
+  Stack,
   TextField,
   LinearProgress,
+  Fade,
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 
@@ -19,10 +19,11 @@ import requestAPIs from "../api/requestAPIs";
 import Alert from "@mui/material/Alert";
 import { useSelector } from "react-redux";
 
-const AddProcessForm = (props) => {
+const AddAccessoriesForm = (props) => {
   const [stylesList, setStylesList] = useState([]);
   const [selectedStyle, setSelectedStyle] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
+  const [Cdate, setDate] = useState();
   const userdetail = useSelector((state) => state.user.user);
   const userId = { assigned_by: [userdetail.pk] };
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,11 +57,14 @@ const AddProcessForm = (props) => {
     setIsSubmitting(true);
     const submitData = async () => {
       try {
-        const resultData = await axios.post(requestAPIs.processes, updatedData);
+        const resultData = await axios.post(
+          requestAPIs.accessories,
+          updatedData
+        );
         console.log(resultData);
         setIsSubmitting(false);
         setAlert(true);
-        setAlertContent(`Process ${resultData.statusText}`);
+        setAlertContent(`Accessory ${resultData.statusText}`);
 
         setFade(true);
         setTimeout(() => {
@@ -86,7 +90,7 @@ const AddProcessForm = (props) => {
   };
 
   const formSchema = Yup.object().shape({
-    process_name: Yup.string().required("A Process Name is required"),
+    item_name: Yup.string().required("A Process Name is required"),
     style_no: Yup.number().required("Select style from the list."),
     qty_per_item: Yup.string().required("Please add quantity per piece."),
     purchase_units: Yup.string().required("Please select the purchase unit."),
@@ -108,8 +112,8 @@ const AddProcessForm = (props) => {
   };
   return (
     <BasicModal
-      title="Add Process"
-      modalOpen={props.onAddProcess}
+      title="Add Accessory"
+      modalOpen={props.onAddAccessory}
       handleClose={props.modalClose}
     >
       <Box sx={{ padding: 2 }}>
@@ -117,14 +121,12 @@ const AddProcessForm = (props) => {
           <Stack spacing={2}>
             <TextField
               fullWidth
-              id="process_name"
-              label="Add Process"
-              {...register("process_name")}
-              autoComplete="process_name"
-              error={!!errors?.process_name}
-              helperText={
-                errors?.process_name ? errors.process_name.message : null
-              }
+              id="item_name"
+              label="Item Name"
+              {...register("item_name")}
+              autoComplete="item_name"
+              error={!!errors?.item_name}
+              helperText={errors?.item_name ? errors.item_name.message : null}
             />
             <Stack direction="row" spacing={2}>
               <TextField
@@ -221,4 +223,4 @@ const AddProcessForm = (props) => {
   );
 };
 
-export default AddProcessForm;
+export default AddAccessoriesForm;

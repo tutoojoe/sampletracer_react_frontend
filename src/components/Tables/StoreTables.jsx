@@ -4,7 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import axios from "../../components/api/axios";
 import requestAPIs from "../../components/api/requestAPIs";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { socket } from "../server/socketIO";
 
 const StoreTables = () => {
   const [accessoriesData, setAccessoriesData] = useState([]);
@@ -17,9 +18,8 @@ const StoreTables = () => {
 
     try {
       const resultProcesses = await axios.get(requestAPIs.processes);
-
       setprocessesData(resultProcesses.data);
-      console.log(resultProcesses.data);
+      // console.log(resultProcesses.data);
       setProcessLoading(false);
     } catch (error) {
       setProcessLoading(false);
@@ -42,7 +42,12 @@ const StoreTables = () => {
     getAccessoriesList();
     getProcessesList();
   }, []);
-
+  socket.on("process_added", (msg) => {
+    getProcessesList();
+  });
+  socket.on("accessory_added", (msg) => {
+    getAccessoriesList();
+  });
   const accessoriesColumns = [
     {
       name: "id",
@@ -193,7 +198,9 @@ const StoreTables = () => {
             borderRadius: 2,
           }}
         >
-          <h3>No Accessories found</h3>
+          <Typography>
+            <h4>No Accessories found</h4>
+          </Typography>
         </Box>
       )}
       {accessoriesData.length > 0 && (

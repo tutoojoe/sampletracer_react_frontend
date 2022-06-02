@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Button, Container, Box, Typography } from "@mui/material";
-
+import { Button, Box } from "@mui/material";
 import StoreTables from "../components/Tables/StoreTables";
-import GridContainer from "../components/UI/GridContainer";
-import GridItemCard from "../components/UI/GridItemCard";
 import { useSelector } from "react-redux";
 import PageHeader from "../components/PageHeader";
 import AddProcessForm from "../components/Forms/AddProcessForm";
+import AddAccessoriesForm from "../components/Forms/AddAccessoriesForm";
 
 const StorePage = () => {
   const isAuth = useSelector((state) => state.login.isAuth);
@@ -26,6 +24,8 @@ const StorePage = () => {
   };
   const handleAddAccessories = () => {
     console.log("adding accessories");
+    setAddAccessories(true);
+    setAddAccessoriesModal(true);
   };
   return (
     <>
@@ -42,7 +42,12 @@ const StorePage = () => {
                 modalClose={modalCloseHandler}
               />
             )}
-
+            {addAccessories && (
+              <AddAccessoriesForm
+                onAddAccessory={addAccessoriesModal}
+                modalClose={modalCloseHandler}
+              />
+            )}
             <Button variant="outlined" onClick={handleAddAccessories}>
               Add Accessories
             </Button>

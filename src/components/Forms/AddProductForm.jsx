@@ -89,6 +89,7 @@ const AddProductForm = (props) => {
   }, []);
 
   const formSubmitHandler = (data) => {
+    console.log("this is data", data);
     setIsSubmitting(true);
     const submitdata = async () => {
       try {
@@ -259,7 +260,31 @@ const AddProductForm = (props) => {
             </TextField>
           </Stack>
           <Stack direction="row" spacing={2} justifyContent="space-between">
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TextField
+              type="date"
+              id="details_received_date"
+              label="Details Received on"
+              {...register("details_received_date")}
+              InputLabelProps={{ shrink: true }}
+              error={!!errors?.details_received_date}
+              helperText={
+                errors?.details_received_date
+                  ? errors.details_received_date.message
+                  : null
+              }
+            />
+            <TextField
+              type="date"
+              id="delivery_date"
+              label="Delivery Date"
+              {...register("delivery_date")}
+              InputLabelProps={{ shrink: true }}
+              error={!!errors?.delivery_date}
+              helperText={
+                errors?.delivery_date ? errors.delivery_date.message : null
+              }
+            />
+            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Details Received on"
                 {...register("details_received_date")}
@@ -268,6 +293,7 @@ const AddProductForm = (props) => {
                 format="yyyy-MM-dd"
                 value={detailRecdDate}
                 onChange={(newValue) => {
+                  console.log(newValue);
                   setDetailRecdDate(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
@@ -278,8 +304,8 @@ const AddProductForm = (props) => {
                     : null
                 }
               />
-            </LocalizationProvider>
-            <LocalizationProvider
+            </LocalizationProvider> */}
+            {/* <LocalizationProvider
               dateAdapter={AdapterDateFns}
               sx={{ width: "10rem" }}
             >
@@ -299,7 +325,7 @@ const AddProductForm = (props) => {
                   errors?.delivery_date ? errors.delivery_date.message : null
                 }
               />
-            </LocalizationProvider>
+            </LocalizationProvider> */}
           </Stack>
 
           <Button type="" fullWidth sx={{ mt: 2 }} variant="outlined">
