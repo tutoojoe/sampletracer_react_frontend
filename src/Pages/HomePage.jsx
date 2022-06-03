@@ -25,6 +25,7 @@ import AddProductForm from "../components/Forms/AddProductForm";
 import { socket } from "../components/server/socketIO";
 import StyleListTable from "../components/Tables/StyleListTable";
 import ElasticSearch from "../components/ElasticSearch";
+import MuiAccordion from "../components/UI/MuiAccordion";
 // import io from "socket.io-client";
 
 // // // const socket = io("http://localhost:8000");
@@ -215,6 +216,8 @@ const HomePage = () => {
           </Box>
           <GridContainer>
             {/* <ElasticSearch /> */}
+            <MuiAccordion />
+
             <PieChart />
             <DoughnutChart />
             {/* <BarChart /> */}
